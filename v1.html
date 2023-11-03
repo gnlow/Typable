@@ -1,11 +1,14 @@
 <!doctype html>
 <html>
     <head>
-
+        <script type="module">
+            import { Bezier } from "./src/Bezier.js"
+            const b = new Bezier
+            document.querySelector("svg").appendChild(b.path)
+        </script>
     </head>
     <body class="p(20)">
         <svg class="b(black/3)" width="800" height="500">
-
         </svg>
         <script src="https://unpkg.com/adorable-css@1.4.3"></script>
     </body>
