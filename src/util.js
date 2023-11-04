@@ -126,3 +126,38 @@ export const bAccVector =
         x: bAcc(a.x, b.x, c.x, d.x)(t),
         y: bAcc(a.y, b.y, c.y, d.y)(t),
     })
+
+export const vectorLen =
+    ({x, y}) => Math.sqrt(x**2 + y**2)
+
+export const vectorDir =
+    ({x, y}) => ({
+        x: x / vectorLen({x, y}),
+        y: y / vectorLen({x, y}),
+    })
+
+export const vectorMulScala =
+    ({x, y}, s) => ({
+        x: x * s,
+        y: y * s,
+    })
+
+export const vectorAdd =
+    (a, b) => ({
+        x: a.x + b.x,
+        y: a.y + b.y,
+    })
+
+export const vectorRotate =
+    theta =>
+    ({x, y}) => ({
+        x: x * Math.cos(theta) - y * Math.sin(theta),
+        y: x * Math.sin(theta) + y * Math.cos(theta),
+    })
+
+export const bNormalVector =
+    (a, b, c, d) =>
+    t => {
+        const vel = bVelVector(a, b, c, d)(t)
+        return vectorRotate(Math.PI/2)(vel)
+    }

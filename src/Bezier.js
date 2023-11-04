@@ -35,14 +35,14 @@ export class Bezier {
             stroke: "black",
             "stroke-width": 2,
         })
-        this.normals = arr(11).map((_, i) =>
+        this.normals = arr(101).map((_, i) =>
             el("path",
                 {
                     stroke: "red",
                     "stroke-width": 1,
-                    t: i * 0.1,
+                    t: i * 0.01, // for debug
                 },
-                [x => x.t = i * 0.1]
+                [x => x.t = i * 0.01]
             )
         )
         this.render()
