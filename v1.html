@@ -3,8 +3,16 @@
     <head>
         <script type="module">
             import { Bezier } from "./src/Bezier.js"
-            const b = new Bezier
-            document.querySelector("svg").appendChild(b.path)
+            const b = new Bezier([
+                [100, 100],
+                [200, 100],
+                [200, 200],
+                [100, 200],
+            ])
+            document.querySelector("svg").append(
+                b.path,
+                ...b.controls,
+            )
         </script>
     </head>
     <body class="p(20)">
