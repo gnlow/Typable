@@ -18,12 +18,14 @@ export const el = (
     return result
 }
 
+import * as P from "./util/Path.js"
+
 export const draggable = f => target => {
     console.log("makeDraggable", this, target)
     const {
-        e: initX,
-        f: initY,
-    } = target.transform.baseVal.getItem(0).matrix
+        x: initX,
+        y: initY,
+    } = P.getLocation(target)
     target.x = initX
     target.y = initY
 
@@ -31,9 +33,9 @@ export const draggable = f => target => {
         console.log("drag start", this)
         e.stopPropagation()
         const {
-            e: initX,
-            f: initY,
-        } = target.transform.baseVal.getItem(0).matrix
+            x: initX,
+            y: initY,
+        } = P.getLocation(target)
         const start = {
             x: e.clientX - initX,
             y: e.clientY - initY,
@@ -41,11 +43,14 @@ export const draggable = f => target => {
         const onMove = e => {
             target.x = e.clientX - start.x
             target.y = e.clientY - start.y
-            target.transform.baseVal.getItem(0).setTranslate(
+            P.setLocation(
                 target.x,
                 target.y,
+            )(target)
+            f(
+                target.x - initX, // dx
+                target.y - initY, // dy
             )
-            f()
         }
         document.body.addEventListener("pointermove", onMove)
         document.body.addEventListener("pointerup", e => {
@@ -58,3 +63,4 @@ export const draggable = f => target => {
 export * as Bezier from "./util/Bezier.js"
 export * as Matrix from "./util/Matrix.js"
 export * as Vector from "./util/Vector.js"
+export * as Path from "./util/Path.js"

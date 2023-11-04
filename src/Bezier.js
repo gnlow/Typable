@@ -3,6 +3,7 @@ import {
     draggable,
     Bezier as B,
     Vector as V,
+    Path as P,
     arr,
 } from "./util.js"
 
@@ -21,7 +22,7 @@ export class Bezier {
             "stroke-width": 10,
             fill: "transparent",
         })
-        this.controls = points.map(([x, y]) =>
+        this.controls = points.map(([x, y], i) =>
             el("circle",
                 {
                     transform:
@@ -31,7 +32,22 @@ export class Bezier {
                     fill: "white",
                     "stroke-width": 5,
                 },
-                [draggable(() => this.render())],
+                [draggable(
+                    (i == 0 || i == 3)
+                        ? (dx, dy) => {
+                            /*
+                            P.moveAmount(
+                                dx, dy
+                            )(
+                                this.controls[
+                                    i == 0 ? 1 : 2
+                                ]
+                            )
+                            */
+                            this.render()
+                        }
+                        : () => this.render()
+                )],
             )
         )
         this.handle = el("path", {
