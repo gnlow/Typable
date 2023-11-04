@@ -69,15 +69,20 @@ export class Bezier {
         this.controls = points.map(([x, y]) =>
             el("circle",
                 {
-                    r: 5,
-                    transform: `translate(
-                        ${x}
-                        ${y}
-                    )`,
+                    transform:
+                        `translate(${x}, ${y})`,
+                    r: 10,
+                    stroke: "black",
+                    fill: "white",
+                    "stroke-width": 5,
                 },
                 [draggable(() => this.render())],
             )
         )
+        this.handle = el("path", {
+            stroke: "black",
+            "stroke-width": 2,
+        })
         this.render()
         console.log(this.controls)
     }
@@ -88,6 +93,12 @@ export class Bezier {
             C ${b.x} ${b.y}
               ${c.x} ${c.y}
               ${d.x} ${d.y}
+        `)
+        this.handle.setAttribute("d", `
+            M ${a.x} ${a.y}
+            L ${b.x} ${b.y}
+            M ${c.x} ${c.y}
+            L ${d.x} ${d.y}
         `)
     }
 }
