@@ -1,7 +1,7 @@
 import {
     el,
     draggable,
-    bPosVector,
+    Bezier as B,
     arr,
 } from "./util.js"
 
@@ -62,7 +62,7 @@ export class Bezier {
             M ${c.x} ${c.y}
             L ${d.x} ${d.y}
         `)
-        const pos = bPosVector(a, b, c, d)
+        const pos = B.posVector(a, b, c, d)
         this.normals.forEach((normal) => {
             const { t } = normal
             normal.setAttribute("d", `
