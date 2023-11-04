@@ -1,3 +1,5 @@
+export const arr = n => new Array(n).fill(undefined)
+
 export const el = (
     tag,
     {children = [], ...attrs} = {},
@@ -52,3 +54,75 @@ export const draggable = f => target => {
     })
     return target
 }
+
+export const matrixMul = (ass, bss) =>
+    ass.map((_, i) =>
+        bss[0].map((_, j) =>
+            ass[i].reduce(
+                (acc, a, k) => acc + a * bss[k][j],
+                0
+            )
+        )
+    )
+
+export const bSeed =
+    (a, b, c, d) =>
+    matrixMul(
+        [
+            [ 1,  0,  0,  0],
+            [-3,  3,  0,  0],
+            [ 3, -6,  3,  0],
+            [-1,  3, -3,  1],
+        ],
+        [
+            [a],
+            [b],
+            [c],
+            [d],
+        ]
+    )
+
+export const bPos =
+    (a, b, c, d) =>
+    t =>
+    matrixMul(
+        [[1, t, t**2, t**3]],
+        bSeed(a, b, c, d),
+    )[0][0]
+
+export const bVel =
+    (a, b, c, d) =>
+    t =>
+    matrixMul(
+        [[0, 1, 2*t, 3*t**2]],
+        bSeed(a, b, c, d),
+    )[0][0]
+
+export const bAcc =
+    (a, b, c, d) =>
+    t =>
+    matrixMul(
+        [[0, 0, 2, 6*t]],
+        bSeed(a, b, c, d),
+    )[0][0]
+
+export const bPosVector =
+    (a, b, c, d) =>
+    t => ({
+        x: bPos(a.x, b.x, c.x, d.x)(t),
+        y: bPos(a.y, b.y, c.y, d.y)(t),
+    })
+
+export const bVelVector =
+    (a, b, c, d) =>
+    t => ({
+        x: bVel(a.x, b.x, c.x, d.x)(t),
+        y: bVel(a.y, b.y, c.y, d.y)(t),
+    })
+
+export const bAccVector =
+    (a, b, c, d) =>
+    t => ({
+        x: bAcc(a.x, b.x, c.x, d.x)(t),
+        y: bAcc(a.y, b.y, c.y, d.y)(t),
+    })

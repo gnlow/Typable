@@ -1,6 +1,8 @@
 import {
     el,
     draggable,
+    bPosVector,
+    arr,
 } from "./util.js"
 
 export class Bezier {
@@ -33,6 +35,16 @@ export class Bezier {
             stroke: "black",
             "stroke-width": 2,
         })
+        this.normals = arr(11).map((_, i) =>
+            el("path",
+                {
+                    stroke: "red",
+                    "stroke-width": 1,
+                    t: i * 0.1,
+                },
+                [x => x.t = i * 0.1]
+            )
+        )
         this.render()
         console.log(this.controls)
     }
@@ -50,5 +62,21 @@ export class Bezier {
             M ${c.x} ${c.y}
             L ${d.x} ${d.y}
         `)
+        const pos = bPosVector(a, b, c, d)
+        this.normals.forEach((normal) => {
+            const { t } = normal
+            normal.setAttribute("d", `
+                M 0 0
+                L ${pos(t).x} ${pos(t).y}
+            `)
+        })
+    }
+    dom() {
+        return [
+            ...this.normals,
+            this.handle,
+            this.path,
+            ...this.controls,
+        ]
     }
 }
