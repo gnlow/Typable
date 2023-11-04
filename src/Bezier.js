@@ -6,6 +6,8 @@ import {
     arr,
 } from "./util.js"
 
+import { twilight } from "./colormap/twilight.js"
+
 export class Bezier {
     constructor(points) {
         this.path = el("path", {
@@ -76,6 +78,17 @@ export class Bezier {
                 M ${pos(t).x} ${pos(t).y}
                 l ${normal(t).x} ${normal(t).y}
             `)
+            const curvature = B.curvature(a, b, c, d)(t) * 100
+            const colorIndex = Math.floor(
+                ((Math.tanh(curvature) + 2) % 2)
+                *
+                (twilight.length / 2)
+            )
+            const [r, g, b_] = twilight[colorIndex]
+                .map(x => x * 255)
+            bar.setAttribute("stroke",
+                `rgb(${r} ${g} ${b_})`
+            )
         })
     }
     dom() {
