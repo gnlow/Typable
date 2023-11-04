@@ -65,7 +65,7 @@ export class Bezier {
         `)
         const pos = B.posVector(a, b, c, d)
         const normal = t => 
-        V.mulScala(100)(
+        V.mulScala(B.curvature(a, b, c, d)(t) * 10000)(
             V.dir(
                 B.normalVector(a, b, c, d)(t)
             )

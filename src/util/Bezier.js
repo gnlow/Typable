@@ -69,3 +69,15 @@ export const normalVector =
         const vel = velVector(a, b, c, d)(t)
         return Vector.rotate(Math.PI/2)(vel)
     }
+
+export const curvature =
+    (a, b, c, d) =>
+    t => {
+        const vel = velVector(a, b, c, d)(t)
+        const acc = accVector(a, b, c, d)(t)
+        return (
+            (vel.x * acc.y - acc.x * vel.y)
+            /
+            (vel.x ** 2 + vel.y ** 2) ** (3/2)
+        )
+    }
