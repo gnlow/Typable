@@ -8,7 +8,8 @@ export const dir =
     })
 
 export const mulScala =
-    ({x, y}, s) => ({
+    s =>
+    ({x, y}) => ({
         x: x * s,
         y: y * s,
     })
