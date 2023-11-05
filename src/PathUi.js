@@ -33,15 +33,12 @@ export class PathUi {
                     "stroke-width": 5,
                 },
                 [draggable(
-                    (i == 0 || i == 3)
+                    (i % 3 == 0)
                         ? (dx, dy) => {
-                            P.moveAmount(
-                                dx, dy
-                            )(
-                                this.controls[
-                                    i == 0 ? 1 : 2
-                                ]
-                            )
+                            if (i != 0)
+                                P.moveAmount(dx, dy)(this.controls[i - 1])
+                            if (i != this.controls.length - 1)
+                                P.moveAmount(dx, dy)(this.controls[i + 1])
                             this.render()
                         }
                         : () => this.render()
@@ -51,64 +48,89 @@ export class PathUi {
         this.handle = el("path", {
             stroke: "black",
             "stroke-width": 2,
+            fill: "transparent",
         })
-        this.bars = arr(101).map((_, i) =>
-            el("path",
+        this.barGroups = this.beziers.map(
+            (_, n) => el("g",
                 {
-                    stroke: "red",
-                    "stroke-width": 1,
-                    t: i * 0.01, // for debug
+                    n,
+                    children: arr(101).map((_, i) =>
+                        el("path",
+                            {
+                                stroke: "red",
+                                "stroke-width": 1,
+                            },
+                            [bar => bar.t = i * 0.01]
+                        )
+                    ),
                 },
-                [x => x.t = i * 0.01]
             )
         )
         this.render()
         console.log(this.controls)
     }
-    render() {
-        const [a, b, c, d] = this.controls
-        const bezier = new B(a, b, c, d)
-        this.path.setAttribute("d", `
-            M ${a.x} ${a.y}
-            C ${b.x} ${b.y}
-              ${c.x} ${c.y}
-              ${d.x} ${d.y}
-        `)
-        this.handle.setAttribute("d", `
-            M ${a.x} ${a.y}
-            L ${b.x} ${b.y}
-            M ${c.x} ${c.y}
-            L ${d.x} ${d.y}
-        `)
-        const pos = t => bezier.posVector(t)
-        const normal = t => 
-        V.mulScala(bezier.curvature(t) * -10000)(
-            V.dir(
-                bezier.normalVector(t)
-            )
+    get beziers() {
+        return arr(Math.floor((this.controls.length - 1) / 3)).map(
+            (_, i) => new B(...this.controls.slice(3 * i, 3 * i + 4))
         )
-        this.bars.forEach(bar => {
-            const { t } = bar
-            bar.setAttribute("d", `
-                M ${pos(t).x} ${pos(t).y}
-                l ${normal(t).x} ${normal(t).y}
-            `)
-            const curvature = bezier.curvature(t) * 100
-            const colorIndex = Math.floor(
-                ((Math.tanh(curvature) + 2) % 2)
-                *
-                (twilight.length / 2)
-            )
-            const [r, g, b_] = twilight[colorIndex]
-                .map(x => x * 255)
-            bar.setAttribute("stroke",
-                `rgb(${r} ${g} ${b_})`
-            )
-        })
+    }
+    get pathD() {
+        const [{x, y}, ...rest] = this.controls
+        return `M ${x} ${y}` +
+        rest.reduce(
+            (acc, now, i) =>
+                acc
+                + (i % 3 == 0 ? "C" : " ")
+                + `${now.x} ${now.y}`,
+            ""
+        )
+    }
+    get handleD() {
+        const [{x, y}, ...rest] = this.controls
+        return rest.reduce(
+            (acc, now, i) =>
+                acc
+                + (i % 3 == 1 ? "M" : "L")
+                + `${now.x} ${now.y}`,
+            `M ${x} ${y}`
+        )
+    }
+    render() {
+        this.path.setAttribute("d", this.pathD)
+        this.handle.setAttribute("d", this.handleD)
+        this.beziers.forEach(
+            (bezier, n) => {
+                const pos = t => bezier.posVector(t)
+                const normal = t => 
+                V.mulScala(bezier.curvature(t) * -10000)(
+                    V.dir(
+                        bezier.normalVector(t)
+                    )
+                )
+                ;[...this.barGroups[n].children].forEach(bar => {
+                    const { t } = bar
+                    bar.setAttribute("d", `
+                        M ${pos(t).x} ${pos(t).y}
+                        l ${normal(t).x} ${normal(t).y}
+                    `)
+                    const curvature = bezier.curvature(t) * 100
+                    const colorIndex = Math.floor(
+                        ((Math.tanh(curvature) + 2) % 2)
+                        *
+                        (twilight.length / 2)
+                    )
+                    const [r, g, b_] = twilight[colorIndex]
+                        .map(x => x * 255)
+                    bar.setAttribute("stroke",
+                        `rgb(${r} ${g} ${b_})`
+                    )
+                })
+            }
+        )
     }
     dom() {
         return [
-            ...this.bars,
+            ...this.barGroups.flat(),
             this.handle,
             this.path,
             ...this.controls,
