@@ -9,7 +9,7 @@ import {
 
 import { twilight } from "./colormap/twilight.js"
 
-export class Bezier {
+export class PathUi {
     constructor(points) {
         this.path = el("path", {
             d: `
