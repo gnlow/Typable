@@ -60,7 +60,7 @@ export const draggable = f => target => {
     return target
 }
 
-export * as Bezier from "./util/Bezier.js"
+export { Bezier } from "./util/Bezier.js"
 export * as Matrix from "./util/Matrix.js"
 export * as Vector from "./util/Vector.js"
 export * as Path from "./util/Path.js"

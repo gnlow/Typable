@@ -69,6 +69,7 @@ export class Bezier {
     }
     render() {
         const [a, b, c, d] = this.controls
+        const bezier = new B(a, b, c, d)
         this.path.setAttribute("d", `
             M ${a.x} ${a.y}
             C ${b.x} ${b.y}
@@ -81,11 +82,11 @@ export class Bezier {
             M ${c.x} ${c.y}
             L ${d.x} ${d.y}
         `)
-        const pos = B.posVector(a, b, c, d)
+        const pos = t => bezier.posVector(t)
         const normal = t => 
-        V.mulScala(B.curvature(a, b, c, d)(t) * -10000)(
+        V.mulScala(bezier.curvature(t) * -10000)(
             V.dir(
-                B.normalVector(a, b, c, d)(t)
+                bezier.normalVector(t)
             )
         )
         this.bars.forEach(bar => {
@@ -94,7 +95,7 @@ export class Bezier {
                 M ${pos(t).x} ${pos(t).y}
                 l ${normal(t).x} ${normal(t).y}
             `)
-            const curvature = B.curvature(a, b, c, d)(t) * 100
+            const curvature = bezier.curvature(t) * 100
             const colorIndex = Math.floor(
                 ((Math.tanh(curvature) + 2) % 2)
                 *
