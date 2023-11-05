@@ -35,7 +35,6 @@ export class Bezier {
                 [draggable(
                     (i == 0 || i == 3)
                         ? (dx, dy) => {
-                            /*
                             P.moveAmount(
                                 dx, dy
                             )(
@@ -43,7 +42,6 @@ export class Bezier {
                                     i == 0 ? 1 : 2
                                 ]
                             )
-                            */
                             this.render()
                         }
                         : () => this.render()

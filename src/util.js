@@ -48,8 +48,8 @@ export const draggable = f => target => {
                 target.y,
             )(target)
             f(
-                target.x - initX, // dx
-                target.y - initY, // dy
+                e.movementX,
+                e.movementY,
             )
         }
         document.body.addEventListener("pointermove", onMove)

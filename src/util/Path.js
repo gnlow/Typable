@@ -19,6 +19,8 @@ export const setLocation =
     {
         target.transform.baseVal.getItem(0)
             .setTranslate(x, y)
+        target.x = x
+        target.y = y
     }
 
 export const moveAmount =
@@ -28,4 +30,6 @@ export const moveAmount =
         const { x, y } = getLocation(target)
         target.transform.baseVal.getItem(0)
             .setTranslate(x + dx, y + dy)
+        target.x = x + dx
+        target.y = y + dy
     }
