@@ -19,7 +19,7 @@ export class PathUi {
                   400 800
             `,
             stroke: "black",
-            "stroke-width": 10,
+            "stroke-width": 15,
             fill: "transparent",
         })
         this.controls = points.map(([x, y], i) =>
@@ -27,10 +27,10 @@ export class PathUi {
                 {
                     transform:
                         `translate(${x}, ${y})`,
-                    r: 10,
+                    r: 5,
                     stroke: "black",
                     fill: "white",
-                    "stroke-width": 5,
+                    "stroke-width": 2,
                 },
                 [draggable(
                     (i % 3 == 0)
