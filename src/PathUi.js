@@ -22,28 +22,9 @@ export class PathUi {
             "stroke-width": 15,
             fill: "transparent",
         })
-        this.controls = points.map(([x, y], i) =>
-            el("circle",
-                {
-                    transform:
-                        `translate(${x}, ${y})`,
-                    r: 5,
-                    stroke: "black",
-                    fill: "white",
-                    "stroke-width": 2,
-                },
-                [draggable(
-                    (i % 3 == 0)
-                        ? (dx, dy) => {
-                            if (i != 0)
-                                P.moveAmount(dx, dy)(this.controls[i - 1])
-                            if (i != this.controls.length - 1)
-                                P.moveAmount(dx, dy)(this.controls[i + 1])
-                            this.render()
-                        }
-                        : () => this.render()
-                )],
-            )
+        this.controls = []
+        points.forEach(([x, y], i) =>
+            this.addControl(x, y, i)
         )
         this.handle = el("path", {
             stroke: "black",
@@ -68,6 +49,31 @@ export class PathUi {
         )
         this.render()
         console.log(this.controls)
+    }
+    addControl(x, y, i = this.controls.length) {
+        this.controls.push(
+            el("circle",
+                {
+                    transform:
+                        `translate(${x}, ${y})`,
+                    r: 5,
+                    stroke: "black",
+                    fill: "white",
+                    "stroke-width": 2,
+                },
+                [draggable(
+                    (i % 3 == 0)
+                        ? (dx, dy) => {
+                            if (i != 0)
+                                P.moveAmount(dx, dy)(this.controls[i - 1])
+                            if (i != this.controls.length - 1)
+                                P.moveAmount(dx, dy)(this.controls[i + 1])
+                            this.render()
+                        }
+                        : () => this.render()
+                )],
+            )
+        )
     }
     get beziers() {
         return arr(Math.floor((this.controls.length - 1) / 3)).map(
@@ -130,7 +136,7 @@ export class PathUi {
     }
     dom() {
         return [
-            ...this.barGroups.flat(),
+            //...this.barGroups.flat(),
             this.handle,
             this.path,
             ...this.controls,
