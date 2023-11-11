@@ -5,7 +5,7 @@
  *  y: number
  * }}
  */
-export const getLocation = target => {
+export const getLocation = (target: any) => {
     const {
         e: x,
         f: y,
@@ -14,8 +14,8 @@ export const getLocation = target => {
 }
 
 export const setLocation =
-    (x, y) =>
-    target =>
+    (x: number, y: number) =>
+    (target: any) =>
     {
         target.transform.baseVal.getItem(0)
             .setTranslate(x, y)
@@ -24,8 +24,8 @@ export const setLocation =
     }
 
 export const moveAmount =
-    (dx, dy) =>
-    target =>
+    (dx: number, dy: number) =>
+    (target: any) =>
     {
         const { x, y } = getLocation(target)
         target.transform.baseVal.getItem(0)

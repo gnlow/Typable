@@ -1,13 +1,18 @@
-export const arr = n => new Array(n).fill(undefined)
+export const arr = (n: number) => new Array(n).fill(undefined)
+
+type Attributes = {
+    children?: SVGElement[]
+    [attr: string]: any // string | number
+}
 
 export const el = (
-    tag,
-    {children = [], ...attrs} = {},
-    [...ops] = [],
+    tag: string,
+    {children = [], ...attrs}: Attributes = {},
+    [...ops]: ((el: any/* SVGElement */) => void)[] = [],
 ) => {
     const result = document.createElementNS("http://www.w3.org/2000/svg", tag)
     for (const [k, v] of Object.entries(attrs)) {
-        result.setAttribute(k, v)
+        result.setAttribute(k, String(v))
     }
     for (const child of children) {
         result.appendChild(child)
@@ -20,7 +25,9 @@ export const el = (
 
 import * as P from "./util/Path.ts"
 
-export const draggable = f => target => {
+export const draggable =
+(f: (x: number, y: number) => void) =>
+(target: HTMLElement & {x: number, y: number}) => {
     console.log("makeDraggable", this, target)
     const {
         x: initX,
@@ -40,7 +47,7 @@ export const draggable = f => target => {
             x: e.clientX - initX,
             y: e.clientY - initY,
         }
-        const onMove = e => {
+        const onMove = (e: MouseEvent) => {
             target.x = e.clientX - start.x
             target.y = e.clientY - start.y
             P.setLocation(

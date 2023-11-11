@@ -9,8 +9,15 @@ import {
 
 import { twilight } from "./colormap/twilight.ts"
 
+type Control = SVGElement & {x?: number, y?: number}
+type Bar = SVGElement & {t: number}
+
 export class PathUi {
-    constructor(points) {
+    path: SVGElement
+    controls: Control[]
+    handle: SVGElement
+    barGroups: SVGElement[]
+    constructor(points: [number, number][]) {
         this.path = el("path", {
             d: `
                 m 0 0
@@ -50,7 +57,11 @@ export class PathUi {
         this.render()
         console.log(this.controls)
     }
-    addControl(x, y, i = this.controls.length) {
+    addControl(
+        x: number,
+        y: number,
+        i = this.controls.length,
+    ) {
         this.controls.push(
             el("circle",
                 {
@@ -77,7 +88,8 @@ export class PathUi {
     }
     get beziers() {
         return arr(Math.floor((this.controls.length - 1) / 3)).map(
-            (_, i) => new B(...this.controls.slice(3 * i, 3 * i + 4))
+            // @ts-ignore: TODO
+            (_, i) => new B(...this.controls.slice(3 * i, 3 * i + 4) as [Control, Control, Control, Control])
         )
     }
     get pathD() {
@@ -106,15 +118,15 @@ export class PathUi {
         this.handle.setAttribute("d", this.handleD)
         this.beziers.forEach(
             (bezier, n) => {
-                const pos = t => bezier.posVector(t)
-                const normal = t => 
+                const pos = (t: number) => bezier.posVector(t)
+                const normal = (t: number) => 
                 V.mulScala(bezier.curvature(t) * -10000)(
                     V.dir(
                         bezier.normalVector(t)
                     )
                 )
                 ;[...this.barGroups[n].children].forEach(bar => {
-                    const { t } = bar
+                    const { t } = bar as Bar
                     bar.setAttribute("d", `
                         M ${pos(t).x} ${pos(t).y}
                         l ${normal(t).x} ${normal(t).y}
