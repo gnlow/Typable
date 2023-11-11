@@ -5,9 +5,9 @@ import {
     Vector as V,
     Path as P,
     arr,
-} from "./util.js"
+} from "./util.ts"
 
-import { twilight } from "./colormap/twilight.js"
+import { twilight } from "./colormap/twilight.ts"
 
 export class PathUi {
     constructor(points) {

@@ -1,5 +1,5 @@
-import * as Matrix from "./Matrix.js"
-import * as Vector from "./Vector.js"
+import * as Matrix from "./Matrix.ts"
+import * as Vector from "./Vector.ts"
 
 export class Bezier1d {
     constructor(a, b, c, d) {

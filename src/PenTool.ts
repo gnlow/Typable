@@ -1,4 +1,4 @@
-import { PathUi } from "./PathUi.js"
+import { PathUi } from "./PathUi.ts"
 
 class PenTool {
     constructor() {

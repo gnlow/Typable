@@ -18,7 +18,7 @@ export const el = (
     return result
 }
 
-import * as P from "./util/Path.js"
+import * as P from "./util/Path.ts"
 
 export const draggable = f => target => {
     console.log("makeDraggable", this, target)
@@ -60,7 +60,7 @@ export const draggable = f => target => {
     return target
 }
 
-export { Bezier } from "./util/Bezier.js"
-export * as Matrix from "./util/Matrix.js"
-export * as Vector from "./util/Vector.js"
-export * as Path from "./util/Path.js"
+export { Bezier } from "./util/Bezier.ts"
+export * as Matrix from "./util/Matrix.ts"
+export * as Vector from "./util/Vector.ts"
+export * as Path from "./util/Path.ts"
