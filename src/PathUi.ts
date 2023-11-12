@@ -9,7 +9,8 @@ import {
 
 import { twilight } from "./colormap/twilight.ts"
 
-type Control = SVGElement & {x?: number, y?: number}
+import { Control } from "./components/Control.ts"
+
 type Bar = SVGElement & {t: number}
 
 export class PathUi {
@@ -63,27 +64,17 @@ export class PathUi {
         i = this.controls.length,
     ) {
         this.controls.push(
-            el("circle",
-                {
-                    transform:
-                        `translate(${x}, ${y})`,
-                    r: 5,
-                    stroke: "black",
-                    fill: "white",
-                    "stroke-width": 2,
-                },
-                [draggable(
-                    (i % 3 == 0)
-                        ? (dx, dy) => {
-                            if (i != 0)
-                                P.moveAmount(dx, dy)(this.controls[i - 1])
-                            if (i != this.controls.length - 1)
-                                P.moveAmount(dx, dy)(this.controls[i + 1])
-                            this.render()
-                        }
-                        : () => this.render()
-                )],
-            )
+            draggable(
+                (i % 3 == 0)
+                    ? (dx, dy) => {
+                        if (i != 0)
+                            this.controls[i - 1].moveAmount(dx, dy)
+                        if (i != this.controls.length - 1)
+                            this.controls[i + 1].moveAmount(dx, dy)
+                        this.render()
+                    }
+                    : () => this.render()
+            )(new Control(x, y))
         )
     }
     get beziers() {
@@ -151,7 +142,7 @@ export class PathUi {
             //...this.barGroups.flat(),
             this.handle,
             this.path,
-            ...this.controls,
+            ...this.controls.map(c => c.element),
         ]
     }
 }

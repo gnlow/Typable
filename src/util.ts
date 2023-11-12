@@ -23,37 +23,35 @@ export const el = (
     return result
 }
 
-import * as P from "./util/Path.ts"
+import { SvgThing } from "./components/SvgThing.ts"
 
 export const draggable =
 (f: (x: number, y: number) => void) =>
-(target: HTMLElement & {x: number, y: number}) => {
+<T extends SvgThing>(target: T) => {
     console.log("makeDraggable", this, target)
     const {
         x: initX,
         y: initY,
-    } = P.getLocation(target)
+    } = target
     target.x = initX
     target.y = initY
 
-    target.addEventListener("pointerdown", e => {
+    target.element.addEventListener("pointerdown", e => {
         console.log("drag start", this)
         e.stopPropagation()
         const {
             x: initX,
             y: initY,
-        } = P.getLocation(target)
+        } = target
         const start = {
             x: e.clientX - initX,
             y: e.clientY - initY,
         }
         const onMove = (e: MouseEvent) => {
-            target.x = e.clientX - start.x
-            target.y = e.clientY - start.y
-            P.setLocation(
-                target.x,
-                target.y,
-            )(target)
+            target.setLocation(
+                e.clientX - start.x,
+                e.clientY - start.y,
+            )
             f(
                 e.movementX,
                 e.movementY,
@@ -70,4 +68,3 @@ export const draggable =
 export { Bezier } from "./util/Bezier.ts"
 export * as Matrix from "./util/Matrix.ts"
 export * as Vector from "./util/Vector.ts"
-export * as Path from "./util/Path.ts"
