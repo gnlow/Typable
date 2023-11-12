@@ -11,7 +11,7 @@ export class Control extends SvgThing {
                     transform:
                         `translate(${x}, ${y})`,
                     r: 5,
-                    stroke: "black",
+                    stroke: "var(--main-color)",
                     fill: "white",
                     "stroke-width": 2,
                 }

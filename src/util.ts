@@ -28,7 +28,7 @@ import { SvgThing } from "./components/SvgThing.ts"
 export const draggable =
 (f: (x: number, y: number) => void) =>
 <T extends SvgThing>(target: T) => {
-    console.log("makeDraggable", this, target)
+    console.log("makeDraggable", target)
     const {
         x: initX,
         y: initY,
@@ -37,7 +37,7 @@ export const draggable =
     target.y = initY
 
     target.element.addEventListener("pointerdown", e => {
-        console.log("drag start", this)
+        console.log("drag start", target)
         e.stopPropagation()
         const {
             x: initX,

@@ -25,7 +25,7 @@ export class PathUi {
                   400 400 
                   400 800
             `,
-            stroke: "black",
+            stroke: "var(--main-color)",
             "stroke-width": 15,
             fill: "transparent",
         })
@@ -34,7 +34,7 @@ export class PathUi {
             this.addControl(x, y, i)
         )
         this.handle = el("path", {
-            stroke: "black",
+            stroke: "var(--main-color)",
             "stroke-width": 2,
             fill: "transparent",
         })
@@ -78,7 +78,6 @@ export class PathUi {
     }
     get beziers() {
         return arr(Math.floor((this.controls.length - 1) / 3)).map(
-            // @ts-ignore: TODO
             (_, i) => new B(...this.controls.slice(3 * i, 3 * i + 4) as [Control, Control, Control, Control])
         )
     }
