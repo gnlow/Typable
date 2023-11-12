@@ -3,7 +3,6 @@ import {
     draggable,
     Bezier as B,
     Vector as V,
-    Path as P,
     arr,
 } from "./util.ts"
 
