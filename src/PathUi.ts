@@ -103,6 +103,10 @@ export class PathUi {
         )
     }
     render() {
+        (document.querySelector("#code") as HTMLDivElement).innerText =
+            this.controls.map(
+                ({x, y}) => `(${x}, ${y})`
+            ).join("\n")
         this.path.setAttribute("d", this.pathD)
         this.handle.setAttribute("d", this.handleD)
         this.beziers.forEach(
